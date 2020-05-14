@@ -39,8 +39,8 @@ export default class Profile extends Component {
                   <span id="heading-name">{ person.name() ? person.name()
                      : 'Nameless Person'}</span>
                 </h4>
-              <span>{username}</span>
-              </div>            
+              <span>{this.state.username}</span>
+              </div>
           </div>
             <p className="lead">
               <button
