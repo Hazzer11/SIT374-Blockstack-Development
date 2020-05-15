@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import * as api from './api'
 import {
   Person,
 } from 'blockstack';
@@ -7,7 +8,13 @@ const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder
 
 export default class Profile extends Component {
   constructor(props) {
-  	super(props);
+    super(props);
+
+    this.state = {
+      timestamp: 'no timestamp yet',
+      text: ''
+    };
+
 
   	this.state = {
   	  person: {
@@ -21,7 +28,8 @@ export default class Profile extends Component {
       username:"",
       currentText:"",
       currentDocument:""
-  	};
+    }; 
+    
   }
 
   render() {
@@ -49,6 +57,25 @@ export default class Profile extends Component {
                 onClick={ handleSignOut.bind(this) }>
                 Logout
               </button>
+            </p>
+          </div>
+
+          <div>
+            <h2>
+              Welcome to PaperState!
+            </h2>
+            <p>
+              Time: {this.state.timestamp ? new Date(this.state.timestamp).toLocaleString('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+                hour12: true,
+                timeZoneName: 'short'
+              }) : "no date yet"}
             </p>
           </div>
 
@@ -84,7 +111,17 @@ export default class Profile extends Component {
 
 
   }
+z
 
+  componentDidMount() {
+    api.subscribeToTimer((err, timestamp) => this.setState({
+      timestamp
+    }));
+  }
+
+
+
+ 
   componentWillMount() {
     this.fetchData()
   }
@@ -97,7 +134,7 @@ export default class Profile extends Component {
     let newText = {
      text: this.state.currentText,
      created_at: Date.now()
-   }
+  }
    const { userSession } = this.props
    const options = { encrypt: false }
    userSession.putFile('TextDocs.json', JSON.stringify(newText), options)

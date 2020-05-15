@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { subscribeToTimer } from './api';
 import Profile from './Profile.js';
 import Signin from './Signin.js';
 import {
