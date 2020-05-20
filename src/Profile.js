@@ -10,11 +10,6 @@ export default class Profile extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      timestamp: 'no timestamp yet',
-      text: ''
-    };
-
 
   	this.state = {
   	  person: {
@@ -26,15 +21,20 @@ export default class Profile extends Component {
   	  	},
   	  },
       username:"",
-      currentText:"",
-      currentDocument:""
-    }; 
-    
+      newText:"",
+      currentDocument:[],
+
+      timestamp: '',
+      isLoading: false
+    };
+
   }
 
   render() {
     const { handleSignOut, userSession } = this.props;
     const { person } = this.state;
+    const { username } = this.state;
+
     return (
       !userSession.isSignInPending() ?
 
@@ -65,7 +65,7 @@ export default class Profile extends Component {
               Welcome to PaperState!
             </h2>
             <p>
-              Time: {this.state.timestamp ? new Date(this.state.timestamp).toLocaleString('en-US', {
+              Lasted updated: {this.state.currentDocument.created_at ? new Date(this.state.currentDocument.created_at).toLocaleString('en-US', {
                 weekday: 'short',
                 month: 'short',
                 day: 'numeric',
@@ -75,7 +75,7 @@ export default class Profile extends Component {
                 second: 'numeric',
                 hour12: true,
                 timeZoneName: 'short'
-              }) : "no date yet"}
+              }) : "No File yet"}
             </p>
           </div>
 
@@ -84,21 +84,25 @@ export default class Profile extends Component {
               <div id="Fill-in-text">
                 <textarea className="input-status"
                   placeholder="Document text goes here"
-                  onChange={e=>this.HandleChange(e)}
+                  onChange={e=>this.handleChange(e)}
+                  value={this.state.newText}
+
                   />
                 </div>
               <div id="Formatted-text">
                 <textarea className="input-status"
                   placeholder="formatted text goes here"
-                  disabled='disabled'>
-                  this text will go</textarea>
+                  disabled='disabled'
+                  value={this.state.currentDocument.text}>
+                  </textarea>
               </div>
               <div id="Submit-button">
                 <button
-                onClick={e => this.handleTextSubmit(e)}
+                onClick={e => this.saveNewText(e)}
                 >
                 Submit Changes
                 </button>
+
               </div>
             </div>
             </div>
@@ -111,52 +115,56 @@ export default class Profile extends Component {
 
 
   }
-z
-
-  componentDidMount() {
-    api.subscribeToTimer((err, timestamp) => this.setState({
-      timestamp
-    }));
-  }
 
 
 
- 
-  componentWillMount() {
-    this.fetchData()
-  }
 
-  HandleChange(event){
-    this.setState({currentText:event.target.value})
-    document.getElementById('Formatted-text').value=this.state.currentText;
-  }
-  handleTextSubmit(event){
-    let newText = {
-     text: this.state.currentText,
-     created_at: Date.now()
-  }
-   const { userSession } = this.props
-   const options = { encrypt: false }
-   userSession.putFile('TextDocs.json', JSON.stringify(newText), options)
-     .then(() => {
-       document.getElementById('Formatted-text').value=this.state.currentText;
+
+
+  saveNewText() {
+     const { userSession } = this.props
+     let currentDocument = this.state.currentDocument
+
+     let newDocument = {
+       text: this.state.newText,
+       created_at: Date.now()
+     }
+
+
+     const options = { encrypt: true }
+     userSession.putFile('Document.json', JSON.stringify(newDocument), options)
+       .then(() => {
+         this.setState({
+           currentDocument:newDocument
+         })
        })
+   }
 
-  }
-
-  fetchData() {
-  const { userSession } = this.props
-  const options = { decrypt: false }
-
-  userSession.getFile('TextDocs.json', options)
-    .then((file) => {
-      var currentDocument = JSON.parse(file || '[]')
-      this.setState({
-        person: new Person(userSession.loadUserData().profile),
-        username: userSession.loadUserData().username,
-        currentText: userSession.loadUserData().text
+  loadNewText() {
+      const { userSession } = this.props
+      const options = { decrypt: true }
+      userSession.getFile('Document.json', options)
+      .then((file) => {
+        var docFile = JSON.parse(file || '[]')
+        this.setState({
+          currentDocument: docFile,
+          newText:docFile.text
+        })
       })
-    })
-  }
+    }
+
+  componentWillMount() {
+    const { userSession } = this.props
+    this.setState({
+      person: new Person(userSession.loadUserData().profile),
+      username: userSession.loadUserData().username
+    });
+    this.loadNewText();
+   }
+
+  handleChange(event) {
+   this.setState({newText: event.target.value});
+    }
+
 
 }

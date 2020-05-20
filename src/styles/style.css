@@ -15,7 +15,7 @@ body{color:#3700FF;text-align:center;}
 
 /* Avatar */
 .avatar{width:100px;height:100px;}
-.avatar-section{margin-bottom:25px;text-align:right;}
+.avatar-section{margin-bottom:25px;}
 .avatar{width:100px;height:100px;}
 .lead{text-align: right;}
 /* Scaffolding */
@@ -32,3 +32,5 @@ input, textarea{color:#000;resize: none;width: 500px;height: 300px;}
 #Fill-in-text{ border: 2px solid green;display: inline-block;}
 #Text-section{color:#000;resize: none;width: auto;height: auto;}
 #Formatted-text{ border: 2px solid red;display: inline-block;}
+#signout-button{position: relative ;left:0%;top:50%;}
+#section-2{position:fixed;  right:1px; top:10%;border: 1px solid black;width: 200;text-align:center;item-align: center;;}
