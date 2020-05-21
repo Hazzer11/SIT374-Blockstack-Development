@@ -7,16 +7,16 @@ export default class Signin extends Component {
 
     return (
       <div className="panel-landing" id="section-1">
-        <h1 className="landing-heading">PaperState</h1>
-        <p className="lead">
+        <div className="app-title">
+          <h1 className="landing-heading">Login to PaperState</h1>
+        </div>
+        <div className="sign-in-blockstack">
           <button
-            className="btn btn-primary btn-lg"
+            className="btn btn-primary btn-lg btn-mar"
             id="signin-button"
             onClick={ handleSignIn.bind(this) }
-          >
-            Sign In with Blockstack
-          </button>
-        </p>
+          >Sign In Blockstack ID</button>
+        </div>
       </div>
     );
   }

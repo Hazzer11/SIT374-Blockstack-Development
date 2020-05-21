@@ -31,36 +31,35 @@ export default class Profile extends Component {
   }
 
   render() {
-    const { handleSignOut, userSession } = this.props;
+    const { handleSignOut, userSession } = this.props
     const { person } = this.state;
-    const { username } = this.state;
-
+    
     return (
       !userSession.isSignInPending() ?
 
-        <div classname="mainsection">
-          <div className="panel-welcome" id="section-2">
-            <div className="avatar-section">
-              <img src={ person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage } className="img-rounded avatar" id="avatar-image" alt=""/>
-              <div className="username">
-                <h4>
-                  <span id="heading-name">{ person.name() ? person.name()
-                     : 'Nameless Person'}</span>
-                </h4>
-              <span>{this.state.username}</span>
-              </div>
+      <div classname="mainsection">
+      <div className="panel-welcome" id="section-2">
+        <div className="avatar-section">
+          <img src={ person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage } className="img-rounded avatar" id="avatar-image" alt=""/>
+          <div className="username">
+            <h4>
+              <span id="heading-name">{ person.name() ? person.name()
+                : 'Nameless Person'}</span>
+            </h4>
+          <span>{this.state.username}</span>
           </div>
-            <p className="lead">
-              <button
-                className="btn btn-primary btn-lg"
-                id="signout-button"
-                onClick={ handleSignOut.bind(this) }>
-                Logout
-              </button>
-            </p>
-          </div>
+      </div>
+        <p className="lead">
+          <button
+            className="btn btn-primary btn-lg"
+            id="signout-button"
+            onClick={ handleSignOut.bind(this) }>
+            Logout
+          </button>
+        </p>
+      </div> 
 
-          <div>
+          <div className="work-space">
             <h2>
               Welcome to PaperState!
             </h2>
@@ -80,7 +79,9 @@ export default class Profile extends Component {
           </div>
 
           <div id="section-3">
+            
             <div id="Text-section">
+              
               <div id="Fill-in-text">
                 <textarea className="input-status"
                   placeholder="Document text goes here"
@@ -88,37 +89,31 @@ export default class Profile extends Component {
                   value={this.state.newText}
 
                   />
-                </div>
+              </div>
+
               <div id="Formatted-text">
-                <textarea className="input-status"
+                <textarea className="input-status2"
                   placeholder="formatted text goes here"
                   disabled='disabled'
                   value={this.state.currentDocument.text}>
                   </textarea>
               </div>
+              
               <div id="Submit-button">
-                <button
+                <button className="btn btn-success btn-lg"
                 onClick={e => this.saveNewText(e)}
                 >
                 Submit Changes
                 </button>
-
               </div>
+
             </div>
-            </div>
-          </div>:null
 
+          </div>
 
-
-
+        </div>:null
     );
-
-
   }
-
-
-
-
 
 
   saveNewText() {
@@ -165,6 +160,4 @@ export default class Profile extends Component {
   handleChange(event) {
    this.setState({newText: event.target.value});
     }
-
-
 }

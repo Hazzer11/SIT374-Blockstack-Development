@@ -1,36 +1,83 @@
-/* Globals */
-a,a:focus,a:hover{color:#fff;}
-html,body{height:100%;background-color:#F4F4FC;}
-body{color:#3700FF;text-align:center;}
-.hide{display:none;}
-.landing-heading{font-family:'Source Code Pro',monospace;font-weight:400;}
+    /* Globals */
+    a,a:focus,a:hover{color:#fff;}
+    html,body{background-color:#e8d9d9; margin-top: 20px;}
+    body{color:#ff8095;text-align:center;}
+    .hide{display:none;}
+    .landing-heading{color: rgba(47, 9, 68, 0.678); font-size: 50px; font-family:"IBM Plex Mono", "Fira Mono", monospace; font-weight:500; margin: 5%;}
+    .panel-landing{background-color: #1b161623 ; text-align: center; border:2px solid grey; border-radius: 2rem; margin-left: 35%; margin-right: 35%; margin-top: 18%;} 
 
-/* Buttons */
-.btn{font-family:'Source Code Pro',monospace;padding:0.5625rem 2.5rem;font-size:0.8125rem;font-weight:400;line-height:1.75rem;border-radius:0!important;-webkit-transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-ms-transition:all .2s ease-in-out;-o-transition:all .2s ease-in-out;transition:all .2s ease-in-out;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
-.btn-lg{font-size:0.875rem;padding:0.6875rem 3.4375rem;line-height:1.75rem;}
-.btn:focus,.btn:active:focus,.btn.active:focus{outline:none;}
-.btn-primary{background-color:#3700FF;border:1px solid #3700FF;}
-.btn-primary:hover,.btn-primary:focus,.btn-primary:active{color:#fff;border:1px solid #270F34;background-color:#270F34;}
-.navbar{background-color:#3700FF !important;-webkit-border-radius: 0;-moz-border-radius: 0;border-radius: 0;}
+    /* Buttons */
+    .btn{font-family:"IBM Plex Mono", "Fira Mono", monospace;padding:0.5625rem 2.5rem; font-size:0.8125rem; font-weight:400;line-height:1.75rem;border-radius:5rem!important;-webkit-transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-ms-transition:all .2s ease-in-out;-o-transition:all .2s ease-in-out;transition:all .2s ease-in-out;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
+    .btn-lg{text-align: center; font-weight: 500; font-family: "IBM Plex Mono", "Fira Mono", monospace; font-size: 20px;}
+    .btn:focus,.btn:active:focus,.btn.active:focus{outline:none;}
+    .btn-primary{background-color:#6610f2;border:1px solid #3700FF;}
+    .btn-primary:hover,.btn-primary:focus,.btn-primary:active{color:#fff;border:1px solid #270F34;background-color:#270F34;}
+    .app-title{align-items: center; padding:15%;}
+    .sign-in-blockstack{align-items: center; padding: 15%;}
+    .btn-mar{align-content: center; background: linear-gradient(#6610f2 30%, #6f42c1 70%); border-radius: 5rem; border:none; box-shadow: 0, .5rem 1rem rgba(0,0,0,0.15);}
+    .work-space{margin-top: 25px;}
 
-/* Avatar */
-.avatar{width:100px;height:100px;}
-.avatar-section{margin-bottom:25px;}
-.avatar{width:100px;height:100px;}
-.lead{text-align: right;}
-/* Scaffolding */
-.site-wrapper{display:table;width:100%;height:90% !important;min-height:90vh !important;}
-.site-wrapper-inner{display:flex;flex-direction:column;justify-content:center;margin-right:auto;margin-left:auto;width:100%;height:90%;}
-.panel-authed{padding:0 0 0 0;}
+    /* Keep it for future profile button layout */
+    /* CAUTION : Please don't delete this code */
+    /* Profile Button
+    .profile-master{
+        position: relative;
+        margin-right: 0px;
+        margin-top: 0px;
+        margin: 0px;
+        margin-inline-start:96%;
+    }
+    .profile-button{
+        width: 35px;
+        height: 35px;
+    }
+    .profile-popup{
+        position: relative;
+        display: inline-block;
+        visibility: hidden;
+        width: inherit;
+        background-color: lightblue;
+        align-items: center;
+        padding: 5px;
+    }
+    /* Toggle this class when clicking on popup button
+    
+    .profile-popup .show{
+        visibility: visible;
+        -webkit-animation: fadeIn 1s;
+        animation: fadeIn 1s;
+    }
+    /* Adding Animation 
+    @-webkit-keyframes fadeIn {
+        from {opacity: 0;}
+        to {opacity: 1;}
+    }
+    @keyframes fadeIn {
+        from {opacity: 0;}
+        to {opacity: 1;}
+    } */
 
-/* Home button */
-.btn-home-hello{position:absolute;font-family:'Source Code Pro',monospace;font-size:11px;font-weight:400;color:rgba(255,255,255,0.85);top:15px;left:15px;padding:3px 20px;background-color:rgba(255,255,255,0.15);border-radius:6px;-webkit-box-shadow:0px 0px 20px 0px rgba(0,0,0,0.15);-moz-box-shadow:0px 0px 20px 0px rgba(0,0,0,0.15);box-shadow:0px 0px 20px 0px rgba(0,0,0,0.15);}
+    /* Avatar */
+    .avatar{width:100px;height:100px; border-radius: 49%;}
+    .avatar-section{margin:25px;}
+    .lead{text-align: center;}
 
-/* Input */
-input, textarea{color:#000;resize: none;width: 500px;height: 300px;}
+    /* Scaffolding */
+    .site-wrapper{width:100%;height:100% !important}
+    .site-wrapper-inner{justify-content:center;margin-right:auto;margin-left:auto;}
+    .panel-authed{padding:0 0 0 0;}
 
-#Fill-in-text{ border: 2px solid green;display: inline-block;}
-#Text-section{color:#000;resize: none;width: auto;height: auto;}
-#Formatted-text{ border: 2px solid red;display: inline-block;}
-#signout-button{position: relative ;left:0%;top:50%;}
-#section-2{position:fixed;  right:1px; top:10%;border: 1px solid black;width: 200;text-align:center;item-align: center;;}
+    /* Home button */
+    .btn-home-hello{position:absolute;font-family:'Source Code Pro',monospace;font-size:11px;font-weight:400;color:rgba(255,255,255,0.85);top:15px;left:15px;padding:3px 20px;background-color:rgba(255,255,255,0.15);border-radius:6px;-webkit-box-shadow:0px 0px 20px 0px rgba(0,0,0,0.15);-moz-box-shadow:0px 0px 20px 0px rgba(0,0,0,0.15);box-shadow:0px 0px 20px 0px rgba(0,0,0,0.15);}
+
+    /* Input */
+    input, textarea{color:#000;resize: none;;width: 500px;height: 800px}
+
+    #Text-section{color:#000; height: 500px;}
+    .input-status{width: 750px;}
+    .input-status2{width: 750px;}
+    #Fill-in-text{ display: inline-block;}
+    #Formatted-text{ display: inline-block;}
+    #signin-button{position: relative; text-align: center;}
+    #signout-button{position: relative ;left:0%;top:50%;}
+    #section-2{position:fixed;  right:1px; border: 2px solid black; width: auto; text-align:center; align-items: center;}
