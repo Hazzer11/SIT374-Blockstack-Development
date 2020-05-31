@@ -25,20 +25,15 @@ export default class Profile extends Component {
       newText:"",
       currentDocument:[],
       markdown:[],
-      timestamp: '',
-      isLoading: false,
       showing: false,
       showing2: false,
       showing3: false,
-      docList:{curCount:0,curIndex:0,data:[{id:0,name:'default'}]},
-      currentDocIndex:0,
+      showing4:false,
+      docList:{curCount:0,curIndex:0,data:[{id:0,name:"default"}],
       listIndex:0,
       newName:"",
-      tempHeading:"",
-      currentName:"sdfgh"
-    };
-    this.updateMarkdown = this.updateMarkdown.bind(this);
-  }
+    }
+  }}
 
   render() {
     const { handleSignOut, userSession } = this.props;
@@ -46,6 +41,7 @@ export default class Profile extends Component {
     const { showing } = this.state;
     const { showing2 } = this.state;
     const { showing3 } = this.state;
+    const { showing4 } = this.state;
 
     return (
       !userSession.isSignInPending() ?
@@ -57,9 +53,9 @@ export default class Profile extends Component {
             <img src={ person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage } className="profile-button" id="avatar-image" alt=""/>
           </a>
           <div id="popup2" className="overlay" style={{display: (showing2 ? 'block' : 'none')}}>
-              <button onClick={e=>this.saveNewText(e)}>Save</button>
+              <button onClick={()=>this.saveNewText()}>Save</button>
               <button onClick={e=>this.restoreDoc(e)}>restore</button>
-              <button>SwapDocument</button>
+              <button onClick={() => this.setState({ showing4: !showing4 })}>SwapDocument</button>
               <button onClick={() => this.setState({ showing3: !showing3 })}>NewDocument</button>
               <button>History</button>
           </div>
@@ -67,7 +63,7 @@ export default class Profile extends Component {
 
           <div id="document creation" className="overlay" style={{display: (showing3 ? 'block' : 'none')}}>
             <textarea id='newSave' value={this.state.newName} onChange={e=> this.nameChange(e)}></textarea>
-            <button onClick={() => this.addToList()}>save</button>
+            <button onClick={()=>this.newSaveClicked()}>save</button>
           </div>
         </div>
 
@@ -139,16 +135,37 @@ export default class Profile extends Component {
         </div>
 
 
+        <div className="overlay" style={{display: (showing4 ? 'block' : 'none')}}>
+          {this.state.docList.data.map((i) =>
+            <ul key={i.id}>
+              <button className="switching_button" onClick={()=>this.changeDoc(i.id)}>{i.name}</button>
+              <button onClick={()=>this.removeDoc(i.id)}>x</button>
+            </ul>
+          )}
+        </div>
+
 
       </div>:null
     );
   }
 
+  componentWillMount() {
+    const { userSession } = this.props
+    this.setState({
+      person: new Person(userSession.loadUserData().profile),
+      username: userSession.loadUserData().username
+    });
+
+    this.loadList();
+    console.log(this.state.docList)
+    this.loadText(this.state.docList.curIndex)
+   }
+
   updateMarkdown(event) {
     this.setState({ markdown:event})
   }
 
-  saveNewText() {
+  saveText() {
 
     let newDocument = {
       md: this.state.markdown,
@@ -160,16 +177,16 @@ export default class Profile extends Component {
 
     this.props.userSession.putFile(tempName, JSON.stringify(newDocument), options)
 
-    .then(() => {
-      this.setState({
-        currentDocument:newDocument
-      })
+
+    this.setState({
+      currentDocument:newDocument
     })
+
    }
 
-  loadNewText(s) {
+  loadText(str) {
       const options = { decrypt: true }
-      let tempName=String(s).concat(".json")
+      let tempName=String(str).concat(".json")
       this.props.userSession.getFile(tempName, options)
 
 
@@ -183,12 +200,6 @@ export default class Profile extends Component {
           });
         }
       })
-      console.log(this.state.docList.data)
-      for (let x in this.state.docList.data){
-        console.log(x.id)
-
-      }
-
 
     }
 
@@ -198,28 +209,63 @@ export default class Profile extends Component {
     })
   }
 
-  componentWillMount() {
-    const { userSession } = this.props
-    this.setState({
-      person: new Person(userSession.loadUserData().profile),
-      username: userSession.loadUserData().username
-    });
-    this.loadList();
-    console.log(this.date.docList)
-    this.loadNewText(this.state.docList.curIndex);
-   }
+  changeDoc(num){
+    let newlistDoc={
+      data:this.state.docList.data,
+      curIndex:num,
+      curCount:this.state.docList.curCount
+    }
+     console.log(newlistDoc)
+     const options = { encrypt: true }
+
+     this.props.userSession.putFile('List.json', JSON.stringify(newlistDoc), options);////////////////////////////////////
+
+     this.setState({
+       docList:newlistDoc
+     })
+
+     this.loadText(num)
+
+    }
+
+  newSaveClicked(){
+    this.setState({ showing3: !this.state.showing3 })
+    this.addToList()
+  }
+
+  removeDoc(num){
+    if (num===this.state.curIndex){
+      let newlistDoc={
+        data:this.state.docList.data.filter(ent => ent.id != num),
+        curIndex:this.state.docList.curIndex,
+        curCount:this.state.docList.curCount
+      }
+       console.log(newlistDoc)
+       const options = { encrypt: true }
+
+       this.props.userSession.putFile('List.json', JSON.stringify(newlistDoc), options);////////////////////////////////////
+
+       this.setState({
+         docList:newlistDoc
+       })
+    }
+  }
 
   loadList(){
      const options = { decrypt: true }
+     console.log("attempt to load")
      this.props.userSession.getFile('List.json', options)
      .then((file) => {
+       console.log("loaded")
        if(file) {
          const docFile = JSON.parse(file);
-
+         console.log(docFile)
          this.setState({
            docList:docFile
          })
+         console.log("success")
        }
+       console.log("finished loading")
      })
    }
 
@@ -228,25 +274,27 @@ export default class Profile extends Component {
        id:++this.state.docList.curCount,
        name:this.state.newName
      }
+     this.state.docList.data.push(newDocument)
 
 
-    this.state.docList.data.push(newDocument)
 
 
-    let newlistDoc={
-      data:this.state.docList.data,
-      curIndex:this.state.currentDocIndex,
-      curCount:this.state.docList.curCount
-    }
-      console.log(newlistDoc)
      const options = { encrypt: true }
 
-     this.props.userSession.putFile('List.json', JSON.stringify(newlistDoc), options);
+     this.props.userSession.putFile('List.json', JSON.stringify(this.state.docList), options);
+     console.log(this.state.docList)
 
-     this.setState({
-       showing3: !this.state.showing3,
-       newName:""
-     });
+
+     let newDocument2 = {
+       md: [],
+       created_at: Date.now()
+     }
+
+     let tempName=String(this.state.docList.curCount).concat(".json")
+
+     this.props.userSession.putFile(tempName, JSON.stringify(newDocument), options)
+
+
      }
 
   nameChange(event){
@@ -255,4 +303,5 @@ export default class Profile extends Component {
      })
 
    }
-  }
+
+}
