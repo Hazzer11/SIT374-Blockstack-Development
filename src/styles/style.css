@@ -1,87 +1,47 @@
-    /* Globals */
-    a,a:focus,a:hover{color:#fff;}
-    html,body{background-color:#e8d9d9; margin-top: 20px;}
-    body{color:#ff8095;text-align:center;}
-    .hide{display:none;}
-    .landing-heading{color: rgba(47, 9, 68, 0.678); font-size: 50px; font-family:"IBM Plex Mono", "Fira Mono", monospace; font-weight:500; margin: 5%;}
-    .panel-landing{background-color: #1b161623 ; text-align: center; border:2px solid grey; border-radius: 2rem; margin-left: 35%; margin-right: 35%; margin-top: 18%;}
+import React, { Component } from 'react';
+import { subscribeToTimer } from './api';
+import Profile from './Profile.js';
+import Signin from './Signin.js';
+import {
+  UserSession,
+  AppConfig
+} from 'blockstack';
 
-    /* Buttons */
-    .btn{font-family:"IBM Plex Mono", "Fira Mono", monospace;padding:0.5625rem 2.5rem; font-size:0.8125rem; font-weight:400;line-height:1.75rem;border-radius:5rem!important;-webkit-transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-ms-transition:all .2s ease-in-out;-o-transition:all .2s ease-in-out;transition:all .2s ease-in-out;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
-    .btn-lg{text-align: center; font-weight: 500; font-family: "IBM Plex Mono", "Fira Mono", monospace; font-size: 20px;}
-    .btn:focus,.btn:active:focus,.btn.active:focus{outline:none;}
-    .btn-primary{background-color:#6610f2;border:1px solid #3700FF;}
-    .btn-primary:hover,.btn-primary:focus,.btn-primary:active{color:#fff;border:1px solid #270F34;background-color:#270F34;}
-    .app-title{align-items: center; padding:15%;}
-    .sign-in-blockstack{align-items: center; padding: 15%;}
-    .btn-mar{align-content: center; background: linear-gradient(#6610f2 30%, #6f42c1 70%); border-radius: 5rem; border:none; box-shadow: 0, .5rem 1rem rgba(0,0,0,0.15);}
-    .work-space{margin-top: 25px;display: inherit;}
+const appConfig = new AppConfig(['store_write', 'publish_data'])
+const userSession = new UserSession({ appConfig: appConfig })
 
-    /* Profile Popup */
-    .profile-container{
-        align-items: center;
-        float: right;
+export default class App extends Component {
+
+
+  handleSignIn(e) {
+    e.preventDefault();
+    userSession.redirectToSignIn();
+  }
+
+  handleSignOut(e) {
+    e.preventDefault();
+    userSession.signUserOut(window.location.origin);
+  }
+
+  render() {
+    return (
+      <div className="site-wrapper">
+        <div className="site-wrapper-inner">
+          { !userSession.isUserSignedIn() ?
+            <Signin userSession={userSession} handleSignIn={ this.handleSignIn } />
+            : <Profile userSession={userSession} handleSignOut={ this.handleSignOut } />
+          }
+        </div>
+      </div>
+    );
+  }
+
+  componentDidMount() {
+    if (userSession.isSignInPending()) {
+      userSession.handlePendingSignIn().then((userData) => {
+        window.history.replaceState({}, document.title, "/")
+        this.setState({ userData: userData})
+      });
     }
-    .menu-container{
-        align-items: left;
-        float: left;
-    }
-
-    .drop-down-menu{
-        align-items: left;
-        float: right;
-    }
-
-    .profile-button{
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        margin-right: 10px;
-        box-sizing: border-box;
-    }
-
-    .popup{
-        background: #e8d9d9;
-        border-radius: 5px;
-        position: absolute;
-        z-index: 10;
-    }
-    .overlay{
-        position: absolute;
-        top: 8%;
-        right: 0%;
-        border: 2px solid grey;
-        border-radius: 2rem;
-        width: auto;
-        float: right !important;
-        text-align:center;
-        align-items: center;
-        background-color:#1b161623;
-    }
-
-    /* Avatar */
-    .avatar{width:100px;height:100px; border-radius: 49%;}
-    .avatar-section{margin:25px;}
-    .lead{text-align: center;}
-    .username{color: rgba(47, 9, 68, 0.678);}
-
-    /* Scaffolding */
-    .site-wrapper{width:100%;height:100% !important}
-    .site-wrapper-inner{justify-content:center;margin-right:auto;margin-left:auto;}
-    .panel-authed{padding:0 0 0 0;}
-
-    /* Home button */
-    .btn-home-hello{position:absolute;font-family:'Source Code Pro',monospace;font-size:11px;font-weight:400;color:rgba(255,255,255,0.85);top:15px;left:15px;padding:3px 20px;background-color:rgba(255,255,255,0.15);border-radius:6px;-webkit-box-shadow:0px 0px 20px 0px rgba(0,0,0,0.15);-moz-box-shadow:0px 0px 20px 0px rgba(0,0,0,0.15);box-shadow:0px 0px 20px 0px rgba(0,0,0,0.15);}
-
-    /* Input */
-    input, textarea{color:#000;resize: none;;width: 500px;height: 800px}
-
-    #Text-section{color:#000; height: 500px;}
-    .input-status{width: 750px;}
-    .input-status2{width: 750px;}
-    #marksection{height:750px;}
-    #Fill-in-text{ display: inline-block;}
-    #Formatted-text{ display: inline-block;}
-    #signin-button{position: relative; text-align: center;}
-    #signout-button{position: relative ;left:0%;top:50%;}
-    #newSave{height: 24px;width: 200px;}
+  }
+}

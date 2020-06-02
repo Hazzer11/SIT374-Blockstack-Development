@@ -24,7 +24,9 @@ export default class Profile extends Component {
       username:"",
       newText:"",
       currentDocument:[],
+      docHistory:[],
       markdown:[],
+      docmarkdown:[],
       timestamp: '',
       isLoading: false,
       showing: false,
@@ -127,6 +129,20 @@ export default class Profile extends Component {
 
           </div>
 
+          <div>
+            <h4>History</h4>
+            <p>
+              <div id="history" className="history">
+                {JSON.stringify(this.state.docHistory)}
+                
+                
+              </div>
+              
+            </p>
+
+          </div>
+
+
           </div>
 
         </div>
@@ -153,7 +169,14 @@ export default class Profile extends Component {
         currentDocument:newDocument
       })
     })
+    this.state.docHistory.push(this.state.currentDocument)
+    
+    console.log(this.state.docHistory)
+
+    this.props.userSession.putFile('Hist.json', JSON.stringify(this.state.docHistory), options)
    }
+
+
 
   loadNewText() {
       const options = { decrypt: true }
@@ -168,6 +191,21 @@ export default class Profile extends Component {
         }
       })
     }
+    loadHistory() {
+      const options = { decrypt: true }
+      this.props.userSession.getFile('Hist.json', options)
+      .then((file) => {
+        if(file) {
+          const docFile = JSON.parse(file);
+          this.setState({
+            docHistory:docFile,
+            docmarkdown:docFile.md
+          });
+        }
+      })
+    }
+
+
   restoreDoc(event){
     this.setState({
       markdown:this.state.currentDocument.md
@@ -180,6 +218,8 @@ export default class Profile extends Component {
       username: userSession.loadUserData().username
     });
     this.loadNewText();
+    this.loadHistory();
+
    }
 
 
@@ -198,9 +238,10 @@ export default class Profile extends Component {
    }
 
    addToList(){
-
    }
   handleChange(event) {
    this.setState({newText: event.target.value});
   }
+
+
 }
