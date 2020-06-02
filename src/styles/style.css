@@ -76,6 +76,7 @@ body{color:#ff8095;text-align:center;}
 /* Input */
 input, textarea{color:#000;resize: none;;width: 500px;height: 800px}
 
+
 #Text-section{color:#000; height: 500px;}
 .input-status{width: 750px;}
 .input-status2{width: 750px;}
@@ -86,3 +87,4 @@ input, textarea{color:#000;resize: none;;width: 500px;height: 800px}
 #signout-button{position: relative ;left:0%;top:50%;}
 #newSave{height: 24px;width: 200px;}
 .switching_button{width: 100px;height: 25px}
+
