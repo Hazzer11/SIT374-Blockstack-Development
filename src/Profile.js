@@ -24,17 +24,21 @@ export default class Profile extends Component {
       username:"",
       newText:"",
       currentDocument:[],
+      docHistory:[],
       markdown:[],
       showing: false,
       showing2: false,
       showing3: false,
       showing4:false,
+      showing5:false,
       docList:{curCount:0,curIndex:0,data:[{id:0,name:"default"}],
       listIndex:0,
-      newName:"",
-    }
-  }}
-
+      newName:"",      
+      docList:[],
+      currentDocIndex:0
+    };
+    this.updateMarkdown = this.updateMarkdown.bind(this);
+  }
   render() {
     const { handleSignOut, userSession } = this.props;
     const { person } = this.state;
@@ -42,6 +46,7 @@ export default class Profile extends Component {
     const { showing2 } = this.state;
     const { showing3 } = this.state;
     const { showing4 } = this.state;
+    const { showing5 } =this.state;
 
     return (
       !userSession.isSignInPending() ?
@@ -53,11 +58,11 @@ export default class Profile extends Component {
             <img src={ person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage } className="profile-button" id="avatar-image" alt=""/>
           </a>
           <div id="popup2" className="overlay" style={{display: (showing2 ? 'block' : 'none')}}>
-              <button onClick={()=>this.saveNewText()}>Save</button>
+              <button onClick={()=>this.saveText()}>Save</button>
               <button onClick={e=>this.restoreDoc(e)}>restore</button>
               <button onClick={() => this.setState({ showing4: !showing4 })}>SwapDocument</button>
               <button onClick={() => this.setState({ showing3: !showing3 })}>NewDocument</button>
-              <button>History</button>
+              <button onClick={() => this.setState({ showing5: !showing5 })}>History</button>
           </div>
 
 
@@ -130,6 +135,20 @@ export default class Profile extends Component {
 
           </div>
 
+          <div style={{display: (showing5 ? 'block' : 'none')}}>
+            <h4>History</h4>
+            <p>
+              <div id="history" className="history">
+                {JSON.stringify(this.state.docHistory)}
+
+
+              </div>
+
+            </p>
+
+          </div>
+
+
           </div>
 
         </div>
@@ -159,6 +178,7 @@ export default class Profile extends Component {
     this.loadList();
     console.log(this.state.docList)
     this.loadText(this.state.docList.curIndex)
+    this.loadHistory();
    }
 
   updateMarkdown(event) {
@@ -182,9 +202,17 @@ export default class Profile extends Component {
       currentDocument:newDocument
     })
 
+    this.state.docHistory.push(this.state.currentDocument)
+
+    console.log(this.state.docHistory)
+
+    this.props.userSession.putFile('Hist.json', JSON.stringify(this.state.docHistory), options)
    }
 
-  loadText(str) {
+
+
+  loadText() {
+
       const options = { decrypt: true }
       let tempName=String(str).concat(".json")
       this.props.userSession.getFile(tempName, options)
@@ -203,11 +231,28 @@ export default class Profile extends Component {
 
     }
 
+    loadHistory() {
+      const options = { decrypt: true }
+      this.props.userSession.getFile('Hist.json', options)
+      .then((file) => {
+        if(file) {
+          const docFile = JSON.parse(file);
+          this.setState({
+            docHistory:docFile,
+            docmarkdown:docFile.md
+          });
+        }
+      })
+    }
+
+
+
   restoreDoc(event){
     this.setState({
       markdown:this.state.currentDocument.md
     })
   }
+
 
   changeDoc(num){
     let newlistDoc={
@@ -303,5 +348,6 @@ export default class Profile extends Component {
      })
 
    }
+
 
 }
