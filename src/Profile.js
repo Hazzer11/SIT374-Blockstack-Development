@@ -31,10 +31,9 @@ export default class Profile extends Component {
       showing3: false,
       showing4:false,
       showing5:false,
-      docList:{curCount:0,curIndex:0,data:[{id:0,name:"default"}],
+      docList:{curCount:1,curIndex:0,data:[{id:0,name:"default"},{id:1,name:"default2"}]},
       listIndex:0,
-      newName:"",      
-      docList:[],
+      newName:"",
       currentDocIndex:0
     };
     this.updateMarkdown = this.updateMarkdown.bind(this);
@@ -175,7 +174,7 @@ export default class Profile extends Component {
       username: userSession.loadUserData().username
     });
 
-    this.loadList();
+    //this.loadList();
     console.log(this.state.docList)
     this.loadText(this.state.docList.curIndex)
     this.loadHistory();
@@ -211,7 +210,7 @@ export default class Profile extends Component {
 
 
 
-  loadText() {
+  loadText(str) {
 
       const options = { decrypt: true }
       let tempName=String(str).concat(".json")
