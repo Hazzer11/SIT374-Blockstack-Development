@@ -32,6 +32,7 @@ export default class Profile extends Component {
       showing: false,
       showing2: false,
       showing3: false,
+      showing5:false,
       docList:[],
       currentDocIndex:0
     };
@@ -44,6 +45,7 @@ export default class Profile extends Component {
     const { showing } = this.state;
     const { showing2 } = this.state;
     const { showing3 } = this.state;
+    const { showing5 } =this.state;
 
     return (
       !userSession.isSignInPending() ?
@@ -59,7 +61,7 @@ export default class Profile extends Component {
               <button onclick={e=>this.restoreDoc(e)}>restore</button>
               <button>SwapDocument</button>
               <button onclick={() => this.setState({ showing3: !showing3 })}>NewDocument</button>
-              <button>History</button>
+              <button onClick={() => this.setState({ showing5: !showing5 })}>History</button>
           </div>
           <div className="overlay" style={{display: (showing3 ? 'block' : 'none')}}>
             <textarea id='newSave'></textarea>
@@ -129,15 +131,15 @@ export default class Profile extends Component {
 
           </div>
 
-          <div>
+          <div style={{display: (showing5 ? 'block' : 'none')}}>
             <h4>History</h4>
             <p>
               <div id="history" className="history">
                 {JSON.stringify(this.state.docHistory)}
-                
-                
+
+
               </div>
-              
+
             </p>
 
           </div>
@@ -170,7 +172,7 @@ export default class Profile extends Component {
       })
     })
     this.state.docHistory.push(this.state.currentDocument)
-    
+
     console.log(this.state.docHistory)
 
     this.props.userSession.putFile('Hist.json', JSON.stringify(this.state.docHistory), options)
