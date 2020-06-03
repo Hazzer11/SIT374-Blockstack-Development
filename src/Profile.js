@@ -22,7 +22,6 @@ export default class Profile extends Component {
   	  	},
   	  },
       username:"",
-      newText:"",
       currentDocument:[],
       docHistory:[],
       markdown:[],
@@ -32,12 +31,11 @@ export default class Profile extends Component {
       showing4:false,
       showing5:false,
       docList:{curCount:1,curIndex:0,data:[{id:0,name:"default"}]},
-      listIndex:0,
       newName:"",
-      currentDocIndex:0
     };
     this.updateMarkdown = this.updateMarkdown.bind(this);
   }
+
   render() {
     const { handleSignOut, userSession } = this.props;
     const { person } = this.state;
@@ -50,15 +48,15 @@ export default class Profile extends Component {
       !userSession.isSignInPending() ?
 
       <div className="mainsection">
-        
+
         {/* Create New Document Popup */}
         <div id="popups" style={{visibility: (showing3 ? 'visible' : 'hidden' )}}>
           <div className="input-group" id="popup-content">
-            <input type="text" className="form-control" placeholder="New Document"/>
+            <input id="newSave" onChange={e=>{this.nameChange(e)}} value={this.state.newName} type="text" className="form-control" placeholder="New Document"/>
             <div className="input-group-append">
               <button className="btn-outline-secondary new-doc-btn" type="button" onClick={() => this.newSaveClicked()}>Create Document</button>
-              <button className="btn-outline-secondary new-doc-btn" type="button" onClick={() => this.setState({ showing3: !showing3 })}>Cancel</button>                
-            </div> 
+              <button className="btn-outline-secondary new-doc-btn" type="button" onClick={() => this.setState({ showing3: !showing3 })}>Cancel</button>
+            </div>
           </div>
         </div>
 
@@ -93,7 +91,7 @@ export default class Profile extends Component {
 
           {/* Menu Bar */}
           <div className="menu-container">
-            
+
             {/* Menu Section */}
             <div className="dropdown-menu-btn" id="dropdown">
               <button className="dropbtn">Menu</button>
@@ -106,16 +104,16 @@ export default class Profile extends Component {
                 <a>Exit</a>
               </div>
             </div>
-        
+
           </div>
-          
-          {/* Profile button */}  
+
+          {/* Profile button */}
           <div className="profile-container">
-          
+
             <a className="button" onClick={() => this.setState({ showing: !showing })}>
               <img src={ person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage } className="profile-button" id="avatar-image" alt=""/>
             </a>
-            
+
             <button className="externalbtn">Share</button>
             <button className="externalbtn">Publish</button>
             <button className="externalbtn">Chat</button>
@@ -144,7 +142,7 @@ export default class Profile extends Component {
             </div>
 
           </div>
-      
+
           <h2 value={this.state.currentName}>
             Welcome to PaperState!
           </h2>
@@ -178,202 +176,200 @@ export default class Profile extends Component {
   }
 
   componentWillMount() {
-    const { userSession } = this.props
-    this.setState({
-      person: new Person(userSession.loadUserData().profile),
-      username: userSession.loadUserData().username
-    });
+  const { userSession } = this.props
 
-    this.loadList();
+  this.setState({
+    person: new Person(userSession.loadUserData().profile),
+    username: userSession.loadUserData().username
+  });
 
+  this.loadList();
 
-   }
+ }
 
   updateMarkdown(event) {
-    this.setState({ markdown:event})
-  }
+  this.setState({ markdown:event})
+}
 
   saveText() {
 
-    let newDocument = {
-      md: this.state.markdown,
-      created_at: Date.now()
-    }
+  let newDocument = {
+    md: this.state.markdown,
+    created_at: Date.now()
+  }
 
-    let tempName=String(this.state.docList.curIndex).concat("document.json")
-    let tempHistName=String(this.state.docList.curIndex).concat("history.json")
+  let tempName=String(this.state.docList.curIndex).concat("document.json")
+  let tempHistName=String(this.state.docList.curIndex).concat("history.json")
 
-    const options = { encrypt: true }
+  const options = { encrypt: true }
 
+  this.state.docHistory.push(newDocument)
 
+  console.log(this.state.docHistory)
+  console.log(newDocument)
 
-    this.setState({
-      currentDocument:newDocument
-    })
+  this.props.userSession.putFile(tempName, JSON.stringify(newDocument), options)
+  this.props.userSession.putFile(tempHistName, JSON.stringify(this.state.docHistory), options)
 
-    this.state.docHistory.push(this.state.currentDocument)
+  this.setState({
+    currentDocument:newDocument
+  })
 
-    console.log(this.state.docHistory)
-    console.log(newDocument)
-
-    this.props.userSession.putFile(tempName, JSON.stringify(newDocument), options)
-    this.props.userSession.putFile(tempHistName, JSON.stringify(this.state.docHistory), options)
-   }
-
-
+ }
 
   loadText(str) {
+    const options = { decrypt: true }
 
-      const options = { decrypt: true }
-      let tempName=String(str).concat("document.json")
-      this.props.userSession.getFile(tempName, options)
+    let tempName=String(str).concat("document.json")
 
+    this.props.userSession.getFile(tempName, options)
 
-      .then((file) => {
-        if(file) {
-          const docFile = JSON.parse(file);
-          this.setState({
-            currentDocument:docFile,
-            markdown:docFile.md
+    .then((file) => {
+      if(file) {
+        const docFile = JSON.parse(file);
+        this.setState({
+          currentDocument:docFile,
+          markdown:docFile.md
 
-          });
-        }
-        else{
-          this.setState({
-            currentDocument:[],
-            markdown:[]
-          });
-        }
-      })
-    }
+        });
+      }
 
-
-
-
-  loadHistory(str) {
-      const options = { decrypt: true }
-      let tempHistName=String(str).concat("history.json")
-      this.props.userSession.getFile(tempHistName, options)
-      .then((file) => {
-        if(file) {
-          const docFile = JSON.parse(file);
-          this.setState({
-            docHistory:docFile
-          });
-        }
-        else{
-          this.setState({
-            currentDocument:[],
-            markdown:[]
-          });
-        }
-      })
-    }
-
-
-
-  restoreDoc(event){
-    this.setState({
-      markdown:this.state.currentDocument.md
+      else{
+        this.setState({
+          currentDocument:[],
+          markdown:[]
+        });
+      }
     })
   }
 
+  loadHistory(str) {
+    const options = { decrypt: true }
+
+    let tempHistName=String(str).concat("history.json")
+
+    this.props.userSession.getFile(tempHistName, options)
+
+    .then((file) => {
+      if(file) {
+        const docFile = JSON.parse(file);
+        this.setState({
+          docHistory:docFile
+        });
+      }
+
+      else{
+        this.setState({
+          docHistory:[]
+        });
+      }
+    })
+  }
+
+  restoreDoc(event){
+  this.setState({
+    markdown:this.state.currentDocument.md
+  })
+}
 
   changeDoc(num){
-    let newlistDoc={
-      data:this.state.docList.data,
-      curIndex:num,
-      curCount:this.state.docList.curCount
-    }
-     console.log(newlistDoc)
-     const options = { encrypt: true }
+  let newlistDoc={
+    data:this.state.docList.data,
+    curIndex:num,
+    curCount:this.state.docList.curCount
+  }
 
-     this.props.userSession.putFile('List.json', JSON.stringify(newlistDoc), options);
-     this.setState({
-       docList:newlistDoc
-     })
+  const options = { encrypt: true }
 
-     this.loadText(num)
-     this.loadHistory(num)
+  console.log(newlistDoc)
 
-    }
+  this.props.userSession.putFile('List.json', JSON.stringify(newlistDoc), options);
+  this.setState({
+    docList:newlistDoc
+  })
+
+  this.loadText(num)
+  this.loadHistory(num)
+  this.setState({showing4:false})
+  }
 
   newSaveClicked(){
-    this.setState({ showing3: !this.state.showing3 })
-    this.addToList()
-  }
+  this.setState({ showing3: !this.state.showing3 })
+  this.addToList()
+}
 
   removeDoc(num){
-    if (num!=this.state.curIndex){
-      let newlistDoc={
-        data:this.state.docList.data.filter(ent => ent.id != num),
-        curIndex:this.state.docList.curIndex,
-        curCount:this.state.docList.curCount
-      }
-       console.log(newlistDoc)
-       const options = { encrypt: true }
-
-       this.props.userSession.putFile('List.json', JSON.stringify(newlistDoc), options);////////////////////////////////////
-
-       this.setState({
-         docList:newlistDoc
-       })
+  if (num!=this.state.docList.curIndex){
+    let newlistDoc={
+      data:this.state.docList.data.filter(ent => ent.id != num),
+      curIndex:this.state.docList.curIndex,
+      curCount:this.state.docList.curCount
     }
+
+    console.log(newlistDoc)
+    const options = { encrypt: true }
+
+    this.props.userSession.putFile('List.json', JSON.stringify(newlistDoc), options);
+
+    this.setState({
+      docList:newlistDoc
+    })
   }
+}
 
   loadList(){
-     const options = { decrypt: true }
-     console.log("attempt to load")
-     this.props.userSession.getFile('List.json', options)
-     .then((file) => {
-       console.log("loaded")
-       if(file) {
-         const docFile = JSON.parse(file);
-         console.log(docFile)
-         this.setState({
-           docList:docFile
-         })
-         this.loadText(this.state.docList.curIndex);
-         this.loadHistory(this.state.docList.curIndex);
-       }
+   const options = { decrypt: true }
 
-     })
-   }
+   console.log("attempt to load")
+
+   this.props.userSession.getFile('List.json', options)
+
+   .then((file) => {
+     console.log("loaded")
+     if(file) {
+       const docFile = JSON.parse(file);
+       console.log(docFile)
+       this.setState({
+         docList:docFile
+       })
+
+       this.loadText(this.state.docList.curIndex);
+       this.loadHistory(this.state.docList.curIndex);
+     }
+
+   })
+ }
 
   addToList(){
-     let newDocument = {
-       id:++this.state.docList.curCount,
-       name:this.state.newName
-     }
-     this.state.docList.data.push(newDocument)
+   let newDocument = {
+     id:++this.state.docList.curCount,
+     name:this.state.newName
+   }
 
+   let newDocument2 = {
+     md: [],
+     created_at: Date.now()
+   }
 
+   const options = { encrypt: true }
 
+   let tempName=String(this.state.docList.curCount).concat("document.json")
+   let tempHistName=String(this.state.docList.curIndex).concat("history.json")
 
-     const options = { encrypt: true }
+   this.state.docList.data.push(newDocument)
 
-     this.props.userSession.putFile('List.json', JSON.stringify(this.state.docList), options);
-     console.log(this.state.docList)
+   console.log(this.state.docList)
 
-
-     let newDocument2 = {
-       md: [],
-       created_at: Date.now()
-     }
-
-     let tempName=String(this.state.docList.curCount).concat("document.json")
-
-     this.props.userSession.putFile(tempName, JSON.stringify(newDocument), options)
-
-
-     }
-
-  nameChange(event){
-     this.setState({
-       newName:document.getElementById('newSave').value
-     })
+   this.props.userSession.putFile('List.json', JSON.stringify(this.state.docList), options);
+   this.props.userSession.putFile(tempName, JSON.stringify(newDocument), options)
+   this.props.userSession.putFile(tempHistName, JSON.stringify([]), options)
 
    }
 
+   nameChange(event){
+   this.setState({
+     newName:document.getElementById('newSave').value
+   })
 
+ }
 }
