@@ -1,10 +1,11 @@
 /* Globals */
 a,a:focus,a:hover{color:#fff;}
-html,body{background-color:#e8d9d9; margin-top: 20px;}
+html,body{background-color:#e8d9d9; margin-top: 10px; display: -ms-flexbox; width: 100%;}
 body{color:#ff8095;text-align:center;}
 .hide{display:none;}
 .landing-heading{color: rgba(47, 9, 68, 0.678); font-size: 50px; font-family:"IBM Plex Mono", "Fira Mono", monospace; font-weight:500; margin: 5%;}
 .panel-landing{background-color: #1b161623 ; text-align: center; border:2px solid grey; border-radius: 2rem; margin-left: 35%; margin-right: 35%; margin-top: 18%;}
+li{list-style-type: none; margin: 3px; margin-bottom: 5px;}
 
 /* Buttons */
 .btn{font-family:"IBM Plex Mono", "Fira Mono", monospace;padding:0.5625rem 2.5rem; font-size:0.8125rem; font-weight:400;line-height:1.75rem;border-radius:5rem!important;-webkit-transition:all .2s ease-in-out;-moz-transition:all .2s ease-in-out;-ms-transition:all .2s ease-in-out;-o-transition:all .2s ease-in-out;transition:all .2s ease-in-out;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
@@ -15,7 +16,35 @@ body{color:#ff8095;text-align:center;}
 .app-title{align-items: center; padding:15%;}
 .sign-in-blockstack{align-items: center; padding: 15%;}
 .btn-mar{align-content: center; background: linear-gradient(#6610f2 30%, #6f42c1 70%); border-radius: 5rem; border:none; box-shadow: 0, .5rem 1rem rgba(0,0,0,0.15);}
-.work-space{margin-top: 25px;display: inherit;}
+.work-space{margin-top: 5px;display: inherit;}
+.new-doc-btn{padding: 5px !important; font-weight: bolder; border: 1px solid grey; background-color: rgb(143, 176, 180); margin-left: 5px;} 
+.btn-outline-secondary{ display: inline; }
+.input-group-prepend, .input-group-append {display: inline-flex;}
+.form-control{ width: 35%;}
+
+/* Popups */
+#popups{
+    top: 0; right: 0; bottom: 0; left: 0;
+    display: inline-flex;
+    align-content: center;
+    position: fixed;
+    background-color: rgba(0,0,0,0.2);
+    transition: .64s ease-in-out;
+    z-index: 9999;
+    overflow: auto;
+}
+
+#popup-content{
+    width: auto;
+    padding: 25px;
+    background: #fff;   
+    max-width: 650px;
+    position: relative;
+    margin:auto;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rbga(0, 0, 0, 0.2);
+    vertical-align: middle;
+}
 
 /* Profile Popup */
 .profile-container{
@@ -48,7 +77,7 @@ body{color:#ff8095;text-align:center;}
 }
 .overlay{
     position: absolute;
-    top: 8%;
+    top: 6%;
     right: 0%;
     border: 2px solid grey;
     border-radius: 2rem;
@@ -57,6 +86,7 @@ body{color:#ff8095;text-align:center;}
     text-align:center;
     align-items: center;
     background-color:#1b161623;
+    z-index: 9999;
 }
 
 /* Menu Bar Button Popups */
@@ -66,6 +96,18 @@ body{color:#ff8095;text-align:center;}
     border-radius: 10rem;
     margin-inline-start: 10px;
 }
+
+.externalbtn{
+    background-color: #c7adadd7;
+    border: 1px solid black;
+    border-radius: 5rem;
+    margin-inline-end: 10px;
+    padding: 4px;
+    padding-left: 7px;
+    padding-right: 7px;
+    font-weight: bold;
+}
+
 #dropdown{
     position: relative;
     float: left;
@@ -112,22 +154,26 @@ body{color:#ff8095;text-align:center;}
 
 /* Input */
 input, textarea{color:#000;resize: none;;width: 500px;height: 800px}
+input, text{width: 70px; height: inherit; padding: 0%;}
+.input-group{ flex: none;}
 
 
 #Text-section{color:#000; height: 500px;}
 .input-status{width: 750px;}
 .input-status2{width: 750px;}
-#marksection{width: 95%; height: inherit !important;}
+#marksection{width: -webkit-fill-available; height: inherit !important; margin: 10px 10px; border-radius: 2%;}
 #Fill-in-text{ display: inline-block;}
 #Formatted-text{ display: inline-block;}
 #signin-button{position: relative; text-align: center;}
 #signout-button{position: relative ;left:0%;top:50%;}
-#newSave{height: 24px;width: 200px;}
-.switching_button{width: 100px;height: 25px}
+#newSave{height: 24px;width: 200px; border-radius: 5rem;}
+.switching-button{width: inherit; height: inherit; border: 1px solid burlywood;}
+.delete-btn{width: auto; height: auto; border-radius: 5rem; margin-left: 4px;}
 
 /* Markdown Editor */
-.w-md-editor-content{height: 750px!important;}
-    .w-md-editor-aree{overflow: hidden !important;}
-    .w-md-editor-text{ margin: 0px !important;}
-    .w-md-editor-preview{ white-space: break-spaces}
-    .w-md-editor-text-pre, .w-md-editor-text-input{padding: 15px;}
+.w-md-editor-content{height: 750px!important; border-radius:10%;}
+.w-md-editor-aree{overflow: hidden !important;}
+.w-md-editor-text{ margin: 0px !important; background-color:#ffece5; border-radius: 2%; border: 1px solid #94d1c2;}
+.w-md-editor-preview{ white-space: break-spaces; background-color: #e5ecff; border-radius: 2%; border: 1px solid #94d1c2;}
+.w-md-editor-text-pre, .w-md-editor-text-input{padding: 15px;}
+#section-3{text-align: center !important;}

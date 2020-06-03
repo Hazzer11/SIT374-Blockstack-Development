@@ -42,7 +42,6 @@ export default class Profile extends Component {
     const { handleSignOut, userSession } = this.props;
     const { person } = this.state;
     const { showing } = this.state;
-    const { showing2 } = this.state;
     const { showing3 } = this.state;
     const { showing4 } = this.state;
     const { showing5 } =this.state;
@@ -51,63 +50,101 @@ export default class Profile extends Component {
       !userSession.isSignInPending() ?
 
       <div className="mainsection">
-        {/* Menu Bar */}
-        <div className="menu-container">
-          
-          {/* Menu Section */}
-          <div className="dropdown-menu-btn" id="dropdown">
-            <button className="dropbtn">Menu</button>
-            <div className="menu-content" id="dropdown-content">
-              <a onClick={() => this.setState({ showing3: !showing3 })}>New Document</a>
-              <a onClick={e => this.restoreDoc(e)}>Restore</a>
-              <a onClick={() => this.setState({ showing4: !showing4 })}>Open Existing Document</a>
-              <a onClick={ () => this.saveText()}>Save Document</a>
-              <a onClick={ () => this.setState({ showing5: !showing5 })}>History</a>
-              <a>Exit</a>
-            </div>
+        
+        {/* Create New Document Popup */}
+        <div id="popups" style={{visibility: (showing3 ? 'visible' : 'hidden' )}}>
+          <div className="input-group" id="popup-content">
+            <input type="text" className="form-control" placeholder="New Document"/>
+            <div className="input-group-append">
+              <button className="btn-outline-secondary new-doc-btn" type="button" onClick={() => this.newSaveClicked()}>Create Document</button>
+              <button className="btn-outline-secondary new-doc-btn" type="button" onClick={() => this.setState({ showing3: !showing3 })}>Cancel</button>                
+            </div> 
           </div>
-
-          {/* <div id="document creation" className="overlay" style={{display: (showing3 ? 'block' : 'none')}}>
-            <textarea id='newSave' value={this.state.newName} onChange={e=> this.nameChange(e)}></textarea>
-            <button onClick={()=>this.newSaveClicked()}>save</button>
-          </div> */}
-       
         </div>
 
-        {/* Profile button */}
-        <div className="profile-container">
-          
-          <a className="button" onClick={() => this.setState({ showing: !showing })}>
-            <img src={ person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage } className="profile-button" id="avatar-image" alt=""/>
-          </a>
+        {/* Change Document Popup */}
+        <div id="popups" style={{visibility: (showing4 ? 'visible' : 'hidden')}}>
+          <div id="popup-content">
+            {this.state.docList.data.map((i) =>
+              <li key={i.id}>
+                <button className="switching-button" onClick={()=>this.changeDoc(i.id)}>{i.name}</button>
+                <button className="delete-btn" onClick={()=>this.removeDoc(i.id)}>X</button>
+              </li>
+            )}
+            <button className="btn-outline-secondary new-doc-btn" type="button" onClick={() => this.setState({ showing4: !showing4 })}>Close</button>
+          </div>
+        </div>
 
-
-          <div id="popup1" className="overlay" onClick={() => this.setState({ showing: !showing })} style={{display: (showing ? 'block' : 'none')}}>
-            <div className="panel-welcome" id="section-2">
-              <div className="avatar-section">
-                <img src={ person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage } className="img-rounded avatar" id="avatar-image" alt=""/>
-                <div className="username">
-                  <h4>
-                    <span id="heading-name">{ person.name() ? person.name()
-                      : 'Nameless Person'}</span>
-                  </h4>
-                <span>{this.state.username}</span>
-                </div>
+        {/* Show History Popup */}
+        <div id="popups" style={{visibility: (showing5 ? 'visible' : 'hidden')}}>
+          <div id="popup-content">
+            <h4>History</h4>
+            <p>
+              <div id="history" className="history">
+                {JSON.stringify(this.state.docHistory)}
               </div>
-              <p className="lead">
-                <button
-                  className="btn btn-primary btn-lg"
-                  id="signout-button"
-                  onClick={ handleSignOut.bind(this) }>
-                  SignOut
-                  </button>
-              </p>
-            </div>
+            </p>
+            <button className="btn-outline-secondary new-doc-btn" type="button" onClick={() => this.setState({ showing5: !showing5 })}>Close</button>
           </div>
-
         </div>
 
+        {/* Working Area */}
         <div className="work-space">
+
+          {/* Menu Bar */}
+          <div className="menu-container">
+            
+            {/* Menu Section */}
+            <div className="dropdown-menu-btn" id="dropdown">
+              <button className="dropbtn">Menu</button>
+              <div className="menu-content" id="dropdown-content">
+                <a onClick={() => this.setState({ showing3: !showing3 })}>New Document</a>
+                <a onClick={e => this.restoreDoc(e)}>Restore</a>
+                <a onClick={() => this.setState({ showing4: !showing4 })}>Open Existing Document</a>
+                <a onClick={ () => this.saveText()}>Save Document</a>
+                <a onClick={ () => this.setState({ showing5: !showing5 })}>History</a>
+                <a>Exit</a>
+              </div>
+            </div>
+        
+          </div>
+          
+          {/* Profile button */}  
+          <div className="profile-container">
+          
+            <a className="button" onClick={() => this.setState({ showing: !showing })}>
+              <img src={ person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage } className="profile-button" id="avatar-image" alt=""/>
+            </a>
+            
+            <button className="externalbtn">Share</button>
+            <button className="externalbtn">Publish</button>
+            <button className="externalbtn">Chat</button>
+
+            <div id="popup1" className="overlay" style={{visibility: (showing ? 'visible' : 'hidden')}}>
+              <div className="panel-welcome" id="section-2">
+                <div className="avatar-section">
+                  <img src={ person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage } className="img-rounded avatar" id="avatar-image" alt=""/>
+                  <div className="username">
+                    <h4>
+                      <span id="heading-name">{ person.name() ? person.name()
+                        : 'Nameless Person'}</span>
+                    </h4>
+                    <span>{this.state.username}</span>
+                  </div>
+                </div>
+                <p className="lead">
+                  <button
+                    className="btn btn-primary btn-lg"
+                    id="signout-button"
+                    onClick={ handleSignOut.bind(this) }>
+                    SignOut
+                    </button>
+                </p>
+              </div>
+            </div>
+
+          </div>
+      
           <h2 value={this.state.currentName}>
             Welcome to PaperState!
           </h2>
@@ -127,46 +164,14 @@ export default class Profile extends Component {
         </div>
 
         <div id="section-3">
-
-          <div id="Text-section">
-
-          <div id="Text-section">
+          <div className="markdown-window" id="text-section">
               <MarkdownEditor
                 id="marksection"
                 value={this.state.markdown}
                 onChange={e=>this.updateMarkdown(e)}
               />
-
           </div>
-
-          <div style={{display: (showing5 ? 'block' : 'none')}}>
-            <h4>History</h4>
-            <p>
-              <div id="history" className="history">
-                {JSON.stringify(this.state.docHistory)}
-
-
-              </div>
-
-            </p>
-
-          </div>
-
-
-          </div>
-
         </div>
-
-
-        <div className="overlay" style={{display: (showing4 ? 'block' : 'none')}}>
-          {this.state.docList.data.map((i) =>
-            <ul key={i.id}>
-              <button className="switching_button" onClick={()=>this.changeDoc(i.id)}>{i.name}</button>
-              <button onClick={()=>this.removeDoc(i.id)}>x</button>
-            </ul>
-          )}
-        </div>
-
 
       </div>:null
     );
