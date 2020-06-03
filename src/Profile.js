@@ -31,7 +31,7 @@ export default class Profile extends Component {
       showing3: false,
       showing4:false,
       showing5:false,
-      docList:{curCount:1,curIndex:0,data:[{id:0,name:"default"},{id:1,name:"default2"}]},
+      docList:{curCount:1,curIndex:0,data:[{id:0,name:"default"}]},
       listIndex:0,
       newName:"",
       currentDocIndex:0
@@ -174,10 +174,9 @@ export default class Profile extends Component {
       username: userSession.loadUserData().username
     });
 
-    //this.loadList();
-    console.log(this.state.docList)
-    this.loadText(this.state.docList.curIndex)
-    this.loadHistory();
+    this.loadList();
+
+
    }
 
   updateMarkdown(event) {
@@ -191,10 +190,11 @@ export default class Profile extends Component {
       created_at: Date.now()
     }
 
-    let tempName=String(this.state.docList.curIndex).concat(".json")
+    let tempName=String(this.state.docList.curIndex).concat("document.json")
+    let tempHistName=String(this.state.docList.curIndex).concat("history.json")
+
     const options = { encrypt: true }
 
-    this.props.userSession.putFile(tempName, JSON.stringify(newDocument), options)
 
 
     this.setState({
@@ -204,8 +204,10 @@ export default class Profile extends Component {
     this.state.docHistory.push(this.state.currentDocument)
 
     console.log(this.state.docHistory)
+    console.log(newDocument)
 
-    this.props.userSession.putFile('Hist.json', JSON.stringify(this.state.docHistory), options)
+    this.props.userSession.putFile(tempName, JSON.stringify(newDocument), options)
+    this.props.userSession.putFile(tempHistName, JSON.stringify(this.state.docHistory), options)
    }
 
 
@@ -213,7 +215,7 @@ export default class Profile extends Component {
   loadText(str) {
 
       const options = { decrypt: true }
-      let tempName=String(str).concat(".json")
+      let tempName=String(str).concat("document.json")
       this.props.userSession.getFile(tempName, options)
 
 
@@ -226,19 +228,33 @@ export default class Profile extends Component {
 
           });
         }
+        else{
+          this.setState({
+            currentDocument:[],
+            markdown:[]
+          });
+        }
       })
-
     }
 
-    loadHistory() {
+
+
+
+  loadHistory(str) {
       const options = { decrypt: true }
-      this.props.userSession.getFile('Hist.json', options)
+      let tempHistName=String(str).concat("history.json")
+      this.props.userSession.getFile(tempHistName, options)
       .then((file) => {
         if(file) {
           const docFile = JSON.parse(file);
           this.setState({
-            docHistory:docFile,
-            docmarkdown:docFile.md
+            docHistory:docFile
+          });
+        }
+        else{
+          this.setState({
+            currentDocument:[],
+            markdown:[]
           });
         }
       })
@@ -262,13 +278,13 @@ export default class Profile extends Component {
      console.log(newlistDoc)
      const options = { encrypt: true }
 
-     this.props.userSession.putFile('List.json', JSON.stringify(newlistDoc), options);////////////////////////////////////
-
+     this.props.userSession.putFile('List.json', JSON.stringify(newlistDoc), options);
      this.setState({
        docList:newlistDoc
      })
 
      this.loadText(num)
+     this.loadHistory(num)
 
     }
 
@@ -307,9 +323,10 @@ export default class Profile extends Component {
          this.setState({
            docList:docFile
          })
-         console.log("success")
+         this.loadText(this.state.docList.curIndex);
+         this.loadHistory(this.state.docList.curIndex);
        }
-       console.log("finished loading")
+
      })
    }
 
@@ -334,7 +351,7 @@ export default class Profile extends Component {
        created_at: Date.now()
      }
 
-     let tempName=String(this.state.docList.curCount).concat(".json")
+     let tempName=String(this.state.docList.curCount).concat("document.json")
 
      this.props.userSession.putFile(tempName, JSON.stringify(newDocument), options)
 
