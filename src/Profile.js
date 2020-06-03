@@ -294,7 +294,7 @@ export default class Profile extends Component {
   }
 
   removeDoc(num){
-    if (num===this.state.curIndex){
+    if (num!=this.state.curIndex){
       let newlistDoc={
         data:this.state.docList.data.filter(ent => ent.id != num),
         curIndex:this.state.docList.curIndex,
