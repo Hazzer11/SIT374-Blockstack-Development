@@ -59,6 +59,43 @@ body{color:#ff8095;text-align:center;}
     background-color:#1b161623;
 }
 
+/* Menu Bar Button Popups */
+.dropbtn{
+    background-color: #c7adadd7;
+    border: 1px solid black;
+    border-radius: 10rem;
+    margin-inline-start: 10px;
+}
+#dropdown{
+    position: relative;
+    float: left;
+}
+#dropdown-content{
+    /* TODO: Change the look of the dropdown menu */
+    display: none;
+    position: absolute;
+    background-color: rgba(94, 74, 74, 0.747);
+    min-width: 160px; 
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;      
+    border-radius: 1rem;
+}
+#dropdown-content a{
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+#dropdown-content a:hover{
+    background-color: lavender;
+}
+#dropdown:hover .menu-content{
+    display: block;
+}
+#dropdown:hover .options-content{
+    display:block;
+}
+
 /* Avatar */
 .avatar{width:100px;height:100px; border-radius: 49%;}
 .avatar-section{margin:25px;}
@@ -80,7 +117,7 @@ input, textarea{color:#000;resize: none;;width: 500px;height: 800px}
 #Text-section{color:#000; height: 500px;}
 .input-status{width: 750px;}
 .input-status2{width: 750px;}
-#marksection{height:750px;}
+#marksection{width: 95%; height: inherit !important;}
 #Fill-in-text{ display: inline-block;}
 #Formatted-text{ display: inline-block;}
 #signin-button{position: relative; text-align: center;}
@@ -88,3 +125,9 @@ input, textarea{color:#000;resize: none;;width: 500px;height: 800px}
 #newSave{height: 24px;width: 200px;}
 .switching_button{width: 100px;height: 25px}
 
+/* Markdown Editor */
+.w-md-editor-content{height: 750px!important;}
+    .w-md-editor-aree{overflow: hidden !important;}
+    .w-md-editor-text{ margin: 0px !important;}
+    .w-md-editor-preview{ white-space: break-spaces}
+    .w-md-editor-text-pre, .w-md-editor-text-input{padding: 15px;}

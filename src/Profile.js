@@ -51,56 +51,61 @@ export default class Profile extends Component {
       !userSession.isSignInPending() ?
 
       <div className="mainsection">
-
+        {/* Menu Bar */}
         <div className="menu-container">
-          <a className="button" onClick={() => this.setState({ showing2: !showing2 })}>
-            <img src={ person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage } className="profile-button" id="avatar-image" alt=""/>
-          </a>
-          <div id="popup2" className="overlay" style={{display: (showing2 ? 'block' : 'none')}}>
-              <button onClick={()=>this.saveText()}>Save</button>
-              <button onClick={e=>this.restoreDoc(e)}>restore</button>
-              <button onClick={() => this.setState({ showing4: !showing4 })}>SwapDocument</button>
-              <button onClick={() => this.setState({ showing3: !showing3 })}>NewDocument</button>
-              <button onClick={() => this.setState({ showing5: !showing5 })}>History</button>
+          
+          {/* Menu Section */}
+          <div className="dropdown-menu-btn" id="dropdown">
+            <button className="dropbtn">Menu</button>
+            <div className="menu-content" id="dropdown-content">
+              <a onClick={() => this.setState({ showing3: !showing3 })}>New Document</a>
+              <a onClick={e => this.restoreDoc(e)}>Restore</a>
+              <a onClick={() => this.setState({ showing4: !showing4 })}>Open Existing Document</a>
+              <a onClick={ () => this.saveText()}>Save Document</a>
+              <a onClick={ () => this.setState({ showing5: !showing5 })}>History</a>
+              <a>Exit</a>
+            </div>
           </div>
 
-
-          <div id="document creation" className="overlay" style={{display: (showing3 ? 'block' : 'none')}}>
+          {/* <div id="document creation" className="overlay" style={{display: (showing3 ? 'block' : 'none')}}>
             <textarea id='newSave' value={this.state.newName} onChange={e=> this.nameChange(e)}></textarea>
             <button onClick={()=>this.newSaveClicked()}>save</button>
-          </div>
+          </div> */}
+       
         </div>
 
+        {/* Profile button */}
         <div className="profile-container">
+          
           <a className="button" onClick={() => this.setState({ showing: !showing })}>
             <img src={ person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage } className="profile-button" id="avatar-image" alt=""/>
           </a>
 
 
-        <div id="popup1" className="overlay" onClick={() => this.setState({ showing: !showing })} style={{display: (showing ? 'block' : 'none')}}>
-              <div className="panel-welcome" id="section-2">
-                <div className="avatar-section">
-                  <img src={ person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage } className="img-rounded avatar" id="avatar-image" alt=""/>
-                  <div className="username">
-                    <h4>
-                      <span id="heading-name">{ person.name() ? person.name()
-                        : 'Nameless Person'}</span>
-                    </h4>
-                  <span>{this.state.username}</span>
-                  </div>
+          <div id="popup1" className="overlay" onClick={() => this.setState({ showing: !showing })} style={{display: (showing ? 'block' : 'none')}}>
+            <div className="panel-welcome" id="section-2">
+              <div className="avatar-section">
+                <img src={ person.avatarUrl() ? person.avatarUrl() : avatarFallbackImage } className="img-rounded avatar" id="avatar-image" alt=""/>
+                <div className="username">
+                  <h4>
+                    <span id="heading-name">{ person.name() ? person.name()
+                      : 'Nameless Person'}</span>
+                  </h4>
+                <span>{this.state.username}</span>
                 </div>
-                <p className="lead">
-                  <button
-                    className="btn btn-primary btn-lg"
-                    id="signout-button"
-                    onClick={ handleSignOut.bind(this) }>
-                    SignOut
-                    </button>
-                </p>
               </div>
+              <p className="lead">
+                <button
+                  className="btn btn-primary btn-lg"
+                  id="signout-button"
+                  onClick={ handleSignOut.bind(this) }>
+                  SignOut
+                  </button>
+              </p>
+            </div>
           </div>
-        </div>
 
+        </div>
 
         <div className="work-space">
           <h2 value={this.state.currentName}>
