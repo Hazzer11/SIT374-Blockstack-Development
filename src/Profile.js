@@ -354,7 +354,7 @@ export default class Profile extends Component {
    const options = { encrypt: true }
 
    let tempName=String(this.state.docList.curCount).concat("document.json")
-   let tempHistName=String(this.state.docList.curIndex).concat("history.json")
+   let tempHistName=String(this.state.docList.curCount).concat("history.json")
 
    this.state.docList.data.push(newDocument)
 
