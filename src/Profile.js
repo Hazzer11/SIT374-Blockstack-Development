@@ -104,7 +104,21 @@ export default class Profile extends Component {
                 <a>Exit</a>
               </div>
             </div>
-
+            
+            {/* Options Section */}
+            <div id="dropdown" className="dropdown-options-btn">
+              <button className="dropbtn">Options</button>
+              <div className="options-content" id="dropdown-content">
+                <a>Export</a>
+                <a>Font Size</a>
+                <a>Font Style</a>
+                <a>Compile</a>
+                <a>Preview Document</a>
+                <a>Theme</a>
+                <a>Help</a>
+                <a>Word Count</a>
+              </div>
+            </div>
           </div>
 
           {/* Profile button */}
@@ -144,7 +158,7 @@ export default class Profile extends Component {
           </div>
 
           <h2 value={this.state.currentName}>
-            Welcome to PaperState!
+            <span style={{fontFamily: 'Lucida Console'}}>PaperState</span>
           </h2>
           <p>
             Lasted updated: {this.state.currentDocument.created_at ? new Date(this.state.currentDocument.created_at).toLocaleString('en-US', {

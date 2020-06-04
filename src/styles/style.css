@@ -91,7 +91,7 @@ li{list-style-type: none; margin: 3px; margin-bottom: 5px;}
 
 /* Menu Bar Button Popups */
 .dropbtn{
-    background-color: #c7adadd7;
+    background-color: #c7adad;
     border: 1px solid black;
     border-radius: 10rem;
     margin-inline-start: 10px;
@@ -116,20 +116,21 @@ li{list-style-type: none; margin: 3px; margin-bottom: 5px;}
     /* TODO: Change the look of the dropdown menu */
     display: none;
     position: absolute;
-    background-color: rgba(94, 74, 74, 0.747);
+    background-color: rgb(94, 74, 74);
     min-width: 160px; 
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;      
     border-radius: 1rem;
 }
 #dropdown-content a{
-    color: black;
+    color: whitesmoke;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
 }
 #dropdown-content a:hover{
     background-color: lavender;
+    color:black;
 }
 #dropdown:hover .menu-content{
     display: block;
