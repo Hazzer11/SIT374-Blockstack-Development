@@ -20,7 +20,7 @@ li{list-style-type: none; margin: 3px; margin-bottom: 5px;}
 .new-doc-btn{padding: 5px !important; font-weight: bolder; border: 1px solid grey; background-color: rgb(143, 176, 180); margin-left: 5px;} 
 .btn-outline-secondary{ display: inline; }
 .input-group-prepend, .input-group-append {display: inline-flex;}
-.form-control{ width: 35%;}
+.form-control{ width: 35%; border-radius: 1rem !important; background-color: lavender;}
 
 /* Popups */
 #popups{
@@ -28,7 +28,7 @@ li{list-style-type: none; margin: 3px; margin-bottom: 5px;}
     display: inline-flex;
     align-content: center;
     position: fixed;
-    background-color: rgba(0,0,0,0.2);
+    background-color: rgba(0,0,0,0.7);
     transition: .64s ease-in-out;
     z-index: 9999;
     overflow: auto;
@@ -37,7 +37,7 @@ li{list-style-type: none; margin: 3px; margin-bottom: 5px;}
 #popup-content{
     width: auto;
     padding: 25px;
-    background: #fff;   
+    background: seashell;   
     max-width: 650px;
     position: relative;
     margin:auto;
@@ -140,7 +140,7 @@ li{list-style-type: none; margin: 3px; margin-bottom: 5px;}
 }
 
 /* Avatar */
-.avatar{width:100px;height:100px; border-radius: 49%;}
+.avatar{width:100px;height:100px; border-radius: 50%;}
 .avatar-section{margin:25px;}
 .lead{text-align: center;}
 .username{color: rgba(47, 9, 68, 0.678);}
@@ -167,7 +167,7 @@ input, text{width: 70px; height: inherit; padding: 0%;}
 #Formatted-text{ display: inline-block;}
 #signin-button{position: relative; text-align: center;}
 #signout-button{position: relative ;left:0%;top:50%;}
-#newSave{height: 24px;width: 200px; border-radius: 5rem;}
+#newSave{height: inherit;width: 200px;}
 .switching-button{width: inherit; height: inherit; border: 1px solid burlywood;}
 .delete-btn{width: auto; height: auto; border-radius: 5rem; margin-left: 4px;}
 

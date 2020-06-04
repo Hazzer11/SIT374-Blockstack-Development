@@ -62,7 +62,7 @@ export default class Profile extends Component {
 
         {/* Change Document Popup */}
         <div id="popups" style={{visibility: (showing4 ? 'visible' : 'hidden')}}>
-          <div id="popup-content">
+          <div id="popup-content">            
             {this.state.docList.data.map((i) =>
               <li key={i.id}>
                 <button className="switching-button" onClick={()=>this.changeDoc(i.id)}>{i.name}</button>
@@ -160,7 +160,7 @@ export default class Profile extends Component {
           <h2 value={this.state.currentName}>
             <span style={{fontFamily: 'Lucida Console'}}>PaperState</span>
           </h2>
-          <p>
+          <p style={{textAlign: 'center'}}>
             Lasted updated: {this.state.currentDocument.created_at ? new Date(this.state.currentDocument.created_at).toLocaleString('en-US', {
               weekday: 'short',
               month: 'short',
@@ -287,30 +287,30 @@ export default class Profile extends Component {
 }
 
   changeDoc(num){
-  let newlistDoc={
-    data:this.state.docList.data,
-    curIndex:num,
-    curCount:this.state.docList.curCount
+    let newlistDoc={
+      data:this.state.docList.data,
+      curIndex:num,
+      curCount:this.state.docList.curCount
+    }
+
+    const options = { encrypt: true }
+
+    console.log(newlistDoc)
+
+    this.props.userSession.putFile('List.json', JSON.stringify(newlistDoc), options);
+    this.setState({
+      docList:newlistDoc
+    })
+
+    this.loadText(num)
+    this.loadHistory(num)
+    this.setState({showing4:false})
+    }
+
+    newSaveClicked(){
+    this.setState({ showing3: !this.state.showing3 })
+    this.addToList()
   }
-
-  const options = { encrypt: true }
-
-  console.log(newlistDoc)
-
-  this.props.userSession.putFile('List.json', JSON.stringify(newlistDoc), options);
-  this.setState({
-    docList:newlistDoc
-  })
-
-  this.loadText(num)
-  this.loadHistory(num)
-  this.setState({showing4:false})
-  }
-
-  newSaveClicked(){
-  this.setState({ showing3: !this.state.showing3 })
-  this.addToList()
-}
 
   removeDoc(num){
   if (num!=this.state.docList.curIndex){
